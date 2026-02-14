@@ -22,7 +22,7 @@ def diffuse(n):
     qc.h(n-1)
     qc.x(range(n))
     qc.h(range(n))
- return qc
+     return qc
 
 def grover(n):
 #apply diffusion operator
@@ -32,7 +32,7 @@ def grover(n):
    for _ in range(iterations):
      qc.compose(phase_oracle(n),inplace=True)
      qc.compose(diffuse(n),inplace=True) #combine phase oracle and diffusion circuits into one
-     qc.measure(range(n),range(n))
+   qc.measure(range(n),range(n))
    return qc
 
 
@@ -43,8 +43,6 @@ def classic_search(N):
        if i==target:
           break
    return time.time()-start
-
-
 q=QuantumRegister(2,'q')
 c=ClassicalRegister(2,'c')
 qc=QuantumCircuit(2,2)
@@ -62,5 +60,21 @@ for i in range(2,6):
     success_ratio=counts.get(marked_state,0)/1024
     print(f"n={i}, success probability: {success_ratio}  running time:{running_time}")
 for i in range(2,6):
+     result=classic_search(i)
+    print(f"total time for trial {i}: {result}")
+sim=AerSimulator()
+for i in range(2,6):
+    start=time.time()
+    qc=grover(i)
+    qc_transpiled=transpile(qc,sim)
+    result=sim.run(qc_transpiled,shots=1024).result() #run grover(1) 1024 times for first iteration of the for loop
+    counts=result.get_counts()
+    running_time=time.time()-start
+    marked_state='1'*i
+    success_ratio=counts.get(marked_state,0)/1024
+    print(f"n={i}, success probability without noise: {success_ratio}  running time:{running_time}")
+for i in range(2,6):
     result=classic_search(i)
-    print(f"total time for trial {i}: {running_time}")
+    print(f"total time for trial without noise {i}: {result}")
+
+    
