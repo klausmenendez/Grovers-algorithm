@@ -31,7 +31,7 @@ simulated:
       Compared noisy simulator vs ideal simulator
      
                                                              Results:
-Verified Grovers algorithm scales with query complexity O(n)
+Verified Grovers algorithm scales with query complexity O(n^(1/2))
 Verified classical linear search scales with query complexity O(n)
 Observed severe degradation in success probability under realistic noise that gets worse with circuit depth
                                                 Key findings:
